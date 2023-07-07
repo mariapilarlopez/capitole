@@ -1,0 +1,22 @@
+server:
+  port: 8090
+
+spring:
+  application: tecnicalTest
+  datasource:
+    url: jdbc:h2:mem:app
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  profiles:
+    active: capitole-dev
+  h2:
+    console:
+      enabled: true
+      path: /console
+logging:
+  level:
+    com.capitole.tecnicalTest : 'DEBUG'
+flyway:
+  enabled: true
+  clean-on-validation-error: true
