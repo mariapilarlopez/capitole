@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.capitole.tecnicalTest.usermanagment.dataaccess.dao.UserDao">
+
+    <resultMap id="UserResultTo" type="com.capitole.tecnicalTest.usermanagment.logic.api.to.UserTo">
+        <id property="idUser" column="ID_USUARIO"/>
+        <result property="firstName" column="NOMBRE"/>
+        <result property="lastName1" column="APELLIDO1"/>
+        <result property="lastName2" column="APELLIDO2"/>
+    </resultMap>
+
+
+    <select id="getUserById" resultMap="UserResultTo">
+        SELECT ID_USUARIO, NOMBRE, APELLIDO1, APELLIDO2
+        FROM CAPITOLE.USUARIOS
+        WHERE ID_USUARIO = #{idUser}
+    </select>
+
+
+</mapper>
