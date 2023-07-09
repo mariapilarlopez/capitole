@@ -59,11 +59,9 @@ public class OrdermanagmentTest extends AbstractTest {
         Long idUserFrom = 1L;
         Long idUserTo = 4L;
 
-        OrderSearchCriteria criteriaUserFrom = new OrderSearchCriteria();
-        criteriaUserFrom.setIdUser(idUserFrom);
+        OrderSearchCriteria criteriaUserFrom =getCriteriaUser_idUser1();
 
-        OrderSearchCriteria criteriaUserTo = new OrderSearchCriteria();
-        criteriaUserTo.setIdUser(idUserTo);
+        OrderSearchCriteria criteriaUserTo = getCriteriaUser_idUser4();
 
         List<OrderTo> orderUserFromList = this.ordermanagment.findAll(criteriaUserFrom);
         List<OrderTo> orderUserToList = this.ordermanagment.findAll(criteriaUserTo);
@@ -81,19 +79,13 @@ public class OrdermanagmentTest extends AbstractTest {
     @Test
     public void copyOrders_FromUserdoesNotExistToUserDoesExist_resultSameNumberOfOrderOfUserTo(){
 
-        Long idUserFrom = 55L;
-        Long idUserTo = 4L;
+        OrderSearchCriteria criteriaUserFrom =getCriteriaUser_idUser55();
 
-        OrderSearchCriteria criteriaUserFrom = new OrderSearchCriteria();
-        criteriaUserFrom.setIdUser(idUserFrom);
+        OrderSearchCriteria criteriaUserTo = getCriteriaUser_idUser1();
 
-        OrderSearchCriteria criteriaUserTo = new OrderSearchCriteria();
-        criteriaUserTo.setIdUser(idUserTo);
-
-        List<OrderTo> orderUserFromList = this.ordermanagment.findAll(criteriaUserFrom);
         List<OrderTo> orderUserToList = this.ordermanagment.findAll(criteriaUserTo);
 
-        this.ordermanagment.copyOrdersFromUserToUser(idUserFrom, idUserTo);
+        this.ordermanagment.copyOrdersFromUserToUser(criteriaUserFrom.getIdUser(), criteriaUserTo.getIdUser());
 
         List<OrderTo> orderUserToAfterCopyList = this.ordermanagment.findAll(criteriaUserTo);
 
@@ -105,18 +97,13 @@ public class OrdermanagmentTest extends AbstractTest {
     @Test
     public void copyOrders_FromUserdoesExistToUserDoesNotExist_resultSameNumberOfOrderOfUserTo(){
 
-        Long idUserFrom = 4L;
-        Long idUserTo = 55L;
+        OrderSearchCriteria criteriaUserFrom =getCriteriaUser_idUser1();
 
-        OrderSearchCriteria criteriaUserFrom = new OrderSearchCriteria();
-        criteriaUserFrom.setIdUser(idUserFrom);
-
-        OrderSearchCriteria criteriaUserTo = new OrderSearchCriteria();
-        criteriaUserTo.setIdUser(idUserTo);
+        OrderSearchCriteria criteriaUserTo = getCriteriaUser_idUser55();
 
         List<OrderTo> orderUserToList = this.ordermanagment.findAll(criteriaUserTo);
 
-        this.ordermanagment.copyOrdersFromUserToUser(idUserFrom, idUserTo);
+        this.ordermanagment.copyOrdersFromUserToUser(criteriaUserFrom.getIdUser(), criteriaUserTo.getIdUser());
 
         List<OrderTo> orderUserToAfterCopyList = this.ordermanagment.findAll(criteriaUserTo);
 
@@ -127,6 +114,51 @@ public class OrdermanagmentTest extends AbstractTest {
                 orderUserToAfterCopyList.size() ==  orderUserToList.size());
 
     }
+
+
+    @Test
+    public void copyOrdersWhernFromUserIsEqualUserTo_resultSameNumberOfOrder(){
+
+        OrderSearchCriteria criteriaUserFrom =getCriteriaUser_idUser1();
+
+        OrderSearchCriteria criteriaUserTo = getCriteriaUser_idUser1();
+
+        List<OrderTo> orderUserToList = this.ordermanagment.findAll(criteriaUserTo);
+
+        this.ordermanagment.copyOrdersFromUserToUser(criteriaUserFrom.getIdUser(), criteriaUserTo.getIdUser());
+
+        List<OrderTo> orderUserToAfterCopyList = this.ordermanagment.findAll(criteriaUserTo);
+
+        Assert.assertTrue("OK ",
+                orderUserToAfterCopyList.size() >  0);
+
+        Assert.assertTrue("OK ",
+                orderUserToAfterCopyList.size() ==  orderUserToList.size());
+
+    }
+
+    private OrderSearchCriteria getCriteriaUser_idUser1(){
+        OrderSearchCriteria criteria = new OrderSearchCriteria();
+        criteria.setIdUser(1L);
+        return criteria;
+
+    }
+
+    private OrderSearchCriteria getCriteriaUser_idUser4(){
+        OrderSearchCriteria criteria = new OrderSearchCriteria();
+        criteria.setIdUser(4L);
+        return criteria;
+
+    }
+
+    private OrderSearchCriteria getCriteriaUser_idUser55(){
+        OrderSearchCriteria criteria = new OrderSearchCriteria();
+        criteria.setIdUser(55L);
+        return criteria;
+
+    }
+
+
 
 
 

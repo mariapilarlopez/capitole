@@ -18,6 +18,8 @@ public interface OrderDao<Order, Long>{
 
     OrderTo getOrderById(@Param("idOrder") Long idOrder);
 
+    List<OrderTo> getMoreExpensiveOrder(OrderSearchCriteria criteria);
+
     void insertOrder(OrderTo order);
 
 
