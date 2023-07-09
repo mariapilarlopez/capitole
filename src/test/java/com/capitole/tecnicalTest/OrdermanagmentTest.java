@@ -102,6 +102,32 @@ public class OrdermanagmentTest extends AbstractTest {
 
     }
 
+    @Test
+    public void copyOrders_FromUserdoesExistToUserDoesNotExist_resultSameNumberOfOrderOfUserTo(){
+
+        Long idUserFrom = 4L;
+        Long idUserTo = 55L;
+
+        OrderSearchCriteria criteriaUserFrom = new OrderSearchCriteria();
+        criteriaUserFrom.setIdUser(idUserFrom);
+
+        OrderSearchCriteria criteriaUserTo = new OrderSearchCriteria();
+        criteriaUserTo.setIdUser(idUserTo);
+
+        List<OrderTo> orderUserToList = this.ordermanagment.findAll(criteriaUserTo);
+
+        this.ordermanagment.copyOrdersFromUserToUser(idUserFrom, idUserTo);
+
+        List<OrderTo> orderUserToAfterCopyList = this.ordermanagment.findAll(criteriaUserTo);
+
+        Assert.assertTrue("OK ",
+                orderUserToAfterCopyList.size() ==  0);
+
+        Assert.assertTrue("OK ",
+                orderUserToAfterCopyList.size() ==  orderUserToList.size());
+
+    }
+
 
 
 
