@@ -39,9 +39,9 @@ public class OrdermanagmentImpl implements Ordermanagment {
     }
 
     @Override
-    public List<HashMap> getMaxOrderIdByUser(OrderSearchCriteria criteria) {
+    public List<HashMap> getMaxOrderForEachUser(OrderSearchCriteria criteria) {
 
-        return this.orderDao.getMaxOrderIdByUser(criteria);
+        return this.orderDao.getMaxOrderForEachUser(criteria);
     }
 
     @Override
@@ -80,6 +80,16 @@ public class OrdermanagmentImpl implements Ordermanagment {
     @Override
     public List<OrderTo> findAll(OrderSearchCriteria criteria) {
         return this.orderDao.findAll(criteria);
+    }
+
+    @Override
+    public OrderTo getMoreExpensiveOrder(OrderSearchCriteria criteria) {
+        return this.orderDao.getMoreExpensiveOrder(criteria);
+    }
+
+    @Override
+    public void insertOrder(OrderTo order){
+        this.orderDao.insertOrder(order);
     }
 
 

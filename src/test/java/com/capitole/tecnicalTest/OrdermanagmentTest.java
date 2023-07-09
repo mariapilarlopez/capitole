@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class OrdermanagmentTest extends AbstractTest {
     @Test
     public void getLastOrderForEachUserWithoutCondictions_resultEmptyList(){
         OrderSearchCriteria criteria = new OrderSearchCriteria();
-        List<HashMap> result = this.ordermanagment.getMaxOrderIdByUser(criteria);
+        List<HashMap> result = this.ordermanagment.getMaxOrderForEachUser(criteria);
         Assert.assertTrue("OK ", result.size()>1);
     }
 
@@ -27,7 +30,7 @@ public class OrdermanagmentTest extends AbstractTest {
     public void getLastOrderForEachUserWithStoreCondiction_StoreDoesExist_resultListWithElements(){
         OrderSearchCriteria criteria = new OrderSearchCriteria();
         criteria.setIdStore(1L);
-        List<HashMap> result = this.ordermanagment.getMaxOrderIdByUser(criteria);
+        List<HashMap> result = this.ordermanagment.getMaxOrderForEachUser(criteria);
         Assert.assertTrue("OK ", result.size()>0);
     }
 
@@ -35,7 +38,7 @@ public class OrdermanagmentTest extends AbstractTest {
     public void getLastOrderForEachUserWithStoreCondiction_StoreDoesNotExist_resultListWithElements(){
         OrderSearchCriteria criteria = new OrderSearchCriteria();
         criteria.setIdStore(55L);
-        List<HashMap> result = this.ordermanagment.getMaxOrderIdByUser(criteria);
+        List<HashMap> result = this.ordermanagment.getMaxOrderForEachUser(criteria);
         Assert.assertTrue("OK ", result.size()==0);
     }
 
@@ -117,7 +120,7 @@ public class OrdermanagmentTest extends AbstractTest {
 
 
     @Test
-    public void copyOrdersWhernFromUserIsEqualUserTo_resultSameNumberOfOrder(){
+    public void copyOrdersWhenFromUserIsEqualUserTo_resultSameNumberOfOrder(){
 
         OrderSearchCriteria criteriaUserFrom =getCriteriaUser_idUser1();
 
@@ -134,6 +137,26 @@ public class OrdermanagmentTest extends AbstractTest {
 
         Assert.assertTrue("OK ",
                 orderUserToAfterCopyList.size() ==  orderUserToList.size());
+
+    }
+/*
+    @Test
+    public void getMoreExpensiveOrderFromStoreThatExist(){
+        OrderSearchCriteria criteria =getCriteriaStore_idStore1();
+        OrderTo order = this.ordermanagment.getMoreExpensiveOrder(criteria);
+        order.setDate(Date.from((Instant.now())));
+        order.setTotal(order.getTotal().add(BigDecimal.TEN));
+        this.ordermanagment.insertOrder(order);
+        OrderTo orderMoreExpensive = this.ordermanagment.getMoreExpensiveOrder(criteria);
+        Assert.assertTrue("OK ",
+                !orderMoreExpensive.getIdOrder().equals(order.getIdOrder()));
+    }
+
+*/
+    private OrderSearchCriteria getCriteriaStore_idStore1(){
+        OrderSearchCriteria criteria = new OrderSearchCriteria();
+        criteria.setIdStore(1L);
+        return criteria;
 
     }
 

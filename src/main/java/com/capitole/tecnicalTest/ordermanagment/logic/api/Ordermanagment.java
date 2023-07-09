@@ -14,7 +14,7 @@ public interface Ordermanagment {
      * @param criteria
      * @return
      */
-    List<HashMap> getMaxOrderIdByUser(OrderSearchCriteria criteria);
+    List<HashMap> getMaxOrderForEachUser(OrderSearchCriteria criteria);
 
     /**
      * Get the order
@@ -32,4 +32,14 @@ public interface Ordermanagment {
      * @return
      */
     List<OrderTo> findAll(OrderSearchCriteria criteria);
+
+    /**
+     * Get the more expensive order.
+     * Filtering orders by optional criterias such as store, city ...
+     * @param criteria
+     * @return
+     */
+    OrderTo getMoreExpensiveOrder(OrderSearchCriteria criteria);
+
+    void insertOrder(OrderTo order);
 }

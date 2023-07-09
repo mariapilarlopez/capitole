@@ -6,9 +6,38 @@
         <id property="idOrder" column="ID_PEDIDO"/>
         <result property="idStore" column="ID_TIENDA"/>
         <result property="idUser" column="ID_USUARIO"/>
+        <result property="total" column="TOTAL"/>
+        <result property="subtotal" column="SUBTOTAL"/>
+        <result property="address" column="POBLACION"/>
+        <result property="date" column="FECHA"/>
+        <result property="zipCode" column="CP"/>
+        <result property="city" column="POBLACION"/>
+        <result property="country" column="PAISCC2"/>
+
+        <association property="user" resultMap="UserResultTo"/>
     </resultMap>
 
-    <select id="getMaxOrderIdByUser" resultType="java.util.HashMap">
+    <resultMap id="UserResultTo" type="com.capitole.tecnicalTest.usermanagment.logic.api.to.UserTo">
+        <id property="idUser" column="ID_USUARIO"/>
+        <result property="firstName" column="NOMBRE_USU"/>
+        <result property="lastName1" column="APELLIDO1"/>
+        <result property="lastName2" column="APELLIDO2"/>
+    </resultMap>
+
+    <sql id="CriteriaBySearchCriteria">
+        <if test="idStore != null and idStore > 0">
+            AND PEDIDOS.ID_TIENDA = #{idStore}
+        </if>
+        <if test="idUser != null and idUser > 0">
+            AND PEDIDOS.ID_USUARIO = #{idUser}
+        </if>
+        <if test="city != null and city != ''">
+            <bind name="cityS" value="'%' + city + '%'"/>
+            AND UPPER(PEDIDOS.POBLACION) LIKE UPPER(#{cityS})
+        </if>
+    </sql>
+
+    <select id="getMaxOrderForEachUser" resultType="java.util.HashMap">
         SELECT USUARIOS.ID_USUARIO AS ID_USUARIO, MAX(ID_PEDIDO) AS MAX_ID_PEDIDO
         FROM CAPITOLE.USUARIOS AS USUARIOS
         LEFT JOIN CAPITOLE.PEDIDOS AS PEDIDOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
@@ -21,29 +50,52 @@
     </select>
 
     <select id="getOrderById" resultMap="OrderResultTo">
-        SELECT ID_USUARIO, ID_PEDIDO, ID_TIENDA
+        SELECT PEDIDOS.ID_USUARIO, ID_PEDIDO, PEDIDOS.ID_TIENDA, USUARIOS.NOMBRE AS NOMBRE_USU, USUARIOS.APELLIDO1,
+               USUARIOS.APELLIDO2, PEDIDOS.TOTAL, PEDIDOS.SUBTOTAL, PEDIDOS.FECHA, PEDIDOS.DIRECCION, PEDIDOS.CP,
+               PEDIDOS.POBLACION, PEDIDOS.PAISCC2
         FROM CAPITOLE.PEDIDOS
+                 INNER JOIN CAPITOLE.USUARIOS AS USUARIOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
+                 INNER JOIN CAPITOLE.TIENDAS AS TIENDAS ON TIENDAS.ID_TIENDA = PEDIDOS.ID_TIENDA
         WHERE ID_PEDIDO = #{idOrder}
     </select>
 
 
     <select id="findAll" resultMap="OrderResultTo">
-        SELECT PEDIDOS.ID_USUARIO, ID_PEDIDO, ID_TIENDA,
+        SELECT PEDIDOS.ID_USUARIO, ID_PEDIDO, PEDIDOS.ID_TIENDA, USUARIOS.NOMBRE AS NOMBRE_USU, USUARIOS.APELLIDO1,
+        USUARIOS.APELLIDO2, PEDIDOS.TOTAL, PEDIDOS.SUBTOTAL, PEDIDOS.FECHA, PEDIDOS.DIRECCION, PEDIDOS.CP,
+        PEDIDOS.POBLACION, PEDIDOS.PAISCC2
         FROM CAPITOLE.PEDIDOS
         INNER JOIN CAPITOLE.USUARIOS AS USUARIOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
+        INNER JOIN CAPITOLE.TIENDAS AS TIENDAS ON TIENDAS.ID_TIENDA = PEDIDOS.ID_TIENDA
         WHERE 1=1
-        <if test="idStore != null and idStore > 0">
-            AND PEDIDOS.ID_TIENDA = #{idStore}
-        </if>
-        <if test="idUser != null and idUser > 0">
-            AND PEDIDOS.ID_USUARIO = #{idUser}
-        </if>
+        <include refid="CriteriaBySearchCriteria"></include>
     </select>
 
+    <select id="getMoreExpensiveOrder" resultMap="OrderResultTo">
+        WITH MAX_ORDER AS(SELECT MAX(PEDIDOS.TOTAL) AS TOTAL
+        FROM CAPITOLE.PEDIDOS
+        INNER JOIN CAPITOLE.USUARIOS AS USUARIOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
+        INNER JOIN CAPITOLE.TIENDAS AS TIENDAS ON TIENDAS.ID_TIENDA = PEDIDOS.ID_TIENDA
+        WHERE 1=1
+        <include refid="CriteriaBySearchCriteria"></include>
+        )
+        SELECT MAX(PEDIDOS.TOTAL) AS MAX_TOTAL, PEDIDOS.ID_PEDIDO AS ID_PEDIDIO, PEDIDOS.ID_USUARIO  AS ID_USUARIO,
+        PEDIDOS.ID_TIENDA AS ID_TIENDA, PEDIDOS.FECHA AS FECHA, PEDIDOS.TOTAL, PEDIDOS.SUBTOTAL,  PEDIDOS.DIRECCION, PEDIDOS.CP, PEDIDOS.POBLACION,
+        PEDIDOS.PAISCC2,USUARIOS.NOMBRE AS NOMBRE_USU, USUARIOS.APELLIDO1, USUARIOS.APELLIDO2
+        FROM CAPITOLE.PEDIDOS
+        INNER JOIN CAPITOLE.USUARIOS AS USUARIOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
+        INNER JOIN CAPITOLE.TIENDAS AS TIENDAS ON TIENDAS.ID_TIENDA = PEDIDOS.ID_TIENDA
+        INNER JOIN   MAX_ORDER ON       PEDIDOS.TOTAL = MAX_ORDER.TOTAL
+        WHERE 1=1
+        <include refid="CriteriaBySearchCriteria"></include>
+        LIMIT 0,1
+
+
+    </select>
 
     <insert id="insertOrder">
         INSERT INTO CAPITOLE.PEDIDOS (ID_USUARIO, ID_TIENDA, FECHA, TOTAL, SUBTOTAL,  DIRECCION, CP, POBLACION, PAISCC2) VALUES
-        ( #{idUser}, #{idStore}, '2023-07-08 08:00:00.0', 15.0, 17.5,'', '','','' )
+        ( #{idUser}, #{idStore}, #{date},#{total} , #{subtotal},#{address}, #{zipCode},#{city},#{country} )
 
     </insert>
 </mapper>

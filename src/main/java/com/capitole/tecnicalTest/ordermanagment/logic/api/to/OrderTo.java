@@ -1,11 +1,19 @@
 package com.capitole.tecnicalTest.ordermanagment.logic.api.to;
 
+import com.capitole.tecnicalTest.usermanagment.logic.api.to.UserTo;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class OrderTo {
 
-
+    @Schema(name = "idOrder", description= "Order ID", example = "1")
     private Long idOrder;
 
     private Long idStore;
@@ -25,6 +33,8 @@ public class OrderTo {
     private BigDecimal subtotal;
 
     private String country;
+
+    private UserTo user;
 
     public Long getIdOrder() {
         return idOrder;
@@ -104,5 +114,13 @@ public class OrderTo {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public UserTo getUser() {
+        return user;
+    }
+
+    public void setUser(UserTo user) {
+        this.user = user;
     }
 }

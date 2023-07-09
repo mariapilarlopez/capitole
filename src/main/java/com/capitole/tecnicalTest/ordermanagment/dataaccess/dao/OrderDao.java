@@ -12,13 +12,13 @@ import java.util.Map;
 @Mapper
 public interface OrderDao<Order, Long>{
 
-    List<HashMap> getMaxOrderIdByUser(OrderSearchCriteria criteria);
+    List<HashMap> getMaxOrderForEachUser(OrderSearchCriteria criteria);
 
     List<OrderTo> findAll(OrderSearchCriteria criteria);
 
     OrderTo getOrderById(@Param("idOrder") Long idOrder);
 
-    List<OrderTo> getMoreExpensiveOrder(OrderSearchCriteria criteria);
+    OrderTo getMoreExpensiveOrder(OrderSearchCriteria criteria);
 
     void insertOrder(OrderTo order);
 

@@ -1,5 +1,7 @@
 server:
   port: 8090
+  unsecuredResources: /env,/health,/info,/metrics,/trace,/refresh,/actuator,/prometheus,/services/rest/swagger.json
+
 
 spring:
   application: tecnicalTest
@@ -14,6 +16,13 @@ spring:
     console:
       enabled: true
       path: /console
+  mvc:
+    format:
+      date: yyyy-MM-dd
+      date-time: yyyy-MM-dd HH:mm:ss
+      time: HH:mm:ss
+    pathmatch:
+      matching-strategy: ant_path_matcher
 mybatis:
   mapper-locations: classpath*:mappers/*.xml
 logging:
