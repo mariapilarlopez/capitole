@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.capitole.tecnicalTest.ordermanagment.dataaccess.dao.OrderDao">
+
+    <resultMap id="OrderResultTo" type="com.capitole.tecnicalTest.ordermanagment.logic.api.to.OrderTo">
+        <id property="idOrder" column="ID_PEDIDO"/>
+        <result property="idStore" column="ID_TIENDA"/>
+        <result property="idUser" column="ID_USUARIO"/>
+    </resultMap>
+
+    <select id="getMaxOrderIdByUser" resultType="java.util.HashMap">
+        SELECT USUARIOS.ID_USUARIO AS ID_USUARIO, MAX(ID_PEDIDO) AS MAX_ID_PEDIDO
+        FROM CAPITOLE.USUARIOS AS USUARIOS
+        LEFT JOIN CAPITOLE.PEDIDOS AS PEDIDOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
+        WHERE 1=1
+        <if test="idStore != null and idStore > 0">
+            AND PEDIDOS.ID_TIENDA = #{idStore}
+        </if>
+        GROUP BY USUARIOS.ID_USUARIO
+        ORDER BY ID_USUARIO
+    </select>
+
+    <select id="getOrderById" resultMap="OrderResultTo">
+        SELECT ID_USUARIO, ID_PEDIDO, ID_TIENDA
+        FROM CAPITOLE.PEDIDOS
+        WHERE ID_PEDIDO = #{idOrder}
+    </select>
+
+
+    <select id="findAll" resultMap="OrderResultTo">
+        SELECT PEDIDOS.ID_USUARIO, ID_PEDIDO, ID_TIENDA,
+        FROM CAPITOLE.PEDIDOS
+        INNER JOIN CAPITOLE.USUARIOS AS USUARIOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
+        WHERE 1=1
+        <if test="idStore != null and idStore > 0">
+            AND PEDIDOS.ID_TIENDA = #{idStore}
+        </if>
+        <if test="idUser != null and idUser > 0">
+            AND PEDIDOS.ID_USUARIO = #{idUser}
+        </if>
+    </select>
+
+
+    <insert id="insertOrder">
+        INSERT INTO CAPITOLE.PEDIDOS (ID_USUARIO, ID_TIENDA, FECHA, TOTAL, SUBTOTAL,  DIRECCION, CP, POBLACION, PAISCC2) VALUES
+        ( #{idUser}, #{idStore}, '2023-07-08 08:00:00.0', 15.0, 17.5,'', '','','' )
+
+    </insert>
+</mapper>
