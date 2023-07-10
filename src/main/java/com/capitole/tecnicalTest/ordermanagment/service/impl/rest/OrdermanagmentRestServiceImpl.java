@@ -34,4 +34,9 @@ public class OrdermanagmentRestServiceImpl  implements OrdermanagmentRestService
     public OrderTo moreExpensiveOrder(OrderSearchCriteria criteria) {
         return this.ordermanagment.getMoreExpensiveOrder(criteria);
     }
+
+    @Override
+    public void copyOrders(Long userIdFrom, Long userIdTo) {
+        this.ordermanagment.copyOrdersFromUserToUser(userIdFrom, userIdTo);
+    }
 }

@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -32,5 +34,13 @@ public interface OrdermanagmentRestService {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 500, message = "System error") })
     OrderTo moreExpensiveOrder(OrderSearchCriteria criteria);
+
+    @PatchMapping("/copy/{userFrom}/{userTo}")
+    @Operation(summary = "Copy orders between users", description = "Given two users (userFrom, userTo). " +
+            "Copy orders of the userFrom to the userTo")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 500, message = "System error"),
+            @ApiResponse(code = 405,  message = "Incorrect parameters")})
+    void copyOrders(@PathVariable("userFrom") Long userIdFrom,@PathVariable("userTo") Long userIdTo);
 
 }
