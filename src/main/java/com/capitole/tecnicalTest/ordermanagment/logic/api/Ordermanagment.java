@@ -23,7 +23,7 @@ public interface Ordermanagment {
      */
     OrderTo getOrderById(Long idOrder);
 
-    void copyOrdersFromUserToUser(Long idUserFrom, Long IdUserTo);
+    Boolean copyOrdersFromUserToUser(Long idUserFrom, Long IdUserTo);
 
     /**
      * Get all orders filter by criteria
@@ -41,5 +41,5 @@ public interface Ordermanagment {
      */
     OrderTo getMoreExpensiveOrder(OrderSearchCriteria criteria);
 
-    void insertOrder(OrderTo order);
+    Boolean insertOrder(OrderTo order);
 }

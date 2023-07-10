@@ -31,14 +31,24 @@
         <if test="idUser != null and idUser > 0">
             AND PEDIDOS.ID_USUARIO = #{idUser}
         </if>
+        <if test="zipCode != null and zipCode != ''">
+            <bind name="zipCodeS" value="'%' + zipCode + '%'"/>
+            AND UPPER(PEDIDOS.CP) LIKE UPPER(#{zipCodeS})
+        </if>
         <if test="city != null and city != ''">
             <bind name="cityS" value="'%' + city + '%'"/>
             AND UPPER(PEDIDOS.POBLACION) LIKE UPPER(#{cityS})
         </if>
+        <if test="dateFrom != null and dateFromSearch != null ">
+            AND PEDIDOS.FECHA <![CDATA[ >= ]]> #{dateFromSearch}
+        </if>
+        <if test="dateTo != null and dateToSearch != null">
+            AND PEDIDOS.FECHA <![CDATA[ <= ]]> #{dateToSearch}
+        </if>
     </sql>
 
     <select id="getMaxOrderForEachUser" resultType="java.util.HashMap">
-        SELECT USUARIOS.ID_USUARIO AS ID_USUARIO, MAX(ID_PEDIDO) AS MAX_ID_PEDIDO
+        SELECT USUARIOS.ID_USUARIO AS idUser, MAX(ID_PEDIDO) AS idOrder
         FROM CAPITOLE.USUARIOS AS USUARIOS
         LEFT JOIN CAPITOLE.PEDIDOS AS PEDIDOS ON USUARIOS.ID_USUARIO = PEDIDOS.ID_USUARIO
         WHERE 1=1
@@ -46,7 +56,7 @@
             AND PEDIDOS.ID_TIENDA = #{idStore}
         </if>
         GROUP BY USUARIOS.ID_USUARIO
-        ORDER BY ID_USUARIO
+        ORDER BY idUser
     </select>
 
     <select id="getOrderById" resultMap="OrderResultTo">
@@ -79,7 +89,7 @@
         WHERE 1=1
         <include refid="CriteriaBySearchCriteria"></include>
         )
-        SELECT MAX(PEDIDOS.TOTAL) AS MAX_TOTAL, PEDIDOS.ID_PEDIDO AS ID_PEDIDIO, PEDIDOS.ID_USUARIO  AS ID_USUARIO,
+        SELECT MAX(PEDIDOS.TOTAL) AS MAX_TOTAL, PEDIDOS.ID_PEDIDO AS ID_PEDIDO, PEDIDOS.ID_USUARIO  AS ID_USUARIO,
         PEDIDOS.ID_TIENDA AS ID_TIENDA, PEDIDOS.FECHA AS FECHA, PEDIDOS.TOTAL, PEDIDOS.SUBTOTAL,  PEDIDOS.DIRECCION, PEDIDOS.CP, PEDIDOS.POBLACION,
         PEDIDOS.PAISCC2,USUARIOS.NOMBRE AS NOMBRE_USU, USUARIOS.APELLIDO1, USUARIOS.APELLIDO2
         FROM CAPITOLE.PEDIDOS
@@ -96,6 +106,5 @@
     <insert id="insertOrder">
         INSERT INTO CAPITOLE.PEDIDOS (ID_USUARIO, ID_TIENDA, FECHA, TOTAL, SUBTOTAL,  DIRECCION, CP, POBLACION, PAISCC2) VALUES
         ( #{idUser}, #{idStore}, #{date},#{total} , #{subtotal},#{address}, #{zipCode},#{city},#{country} )
-
     </insert>
 </mapper>

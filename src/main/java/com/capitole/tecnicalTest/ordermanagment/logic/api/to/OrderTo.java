@@ -2,14 +2,9 @@ package com.capitole.tecnicalTest.ordermanagment.logic.api.to;
 
 import com.capitole.tecnicalTest.usermanagment.logic.api.to.UserTo;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class OrderTo {
 

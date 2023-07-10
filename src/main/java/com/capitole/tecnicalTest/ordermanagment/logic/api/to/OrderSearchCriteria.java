@@ -1,10 +1,13 @@
 package com.capitole.tecnicalTest.ordermanagment.logic.api.to;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @JsonIgnoreProperties(
@@ -21,7 +24,18 @@ public class OrderSearchCriteria implements Serializable {
     @Schema(name = "idUser", description= "User identifier", example = "1")
     private Long idUser;
 
-    private Date date;
+    @Schema(name = "dateFrom", description= "Date From", example = "2023-07-08")
+    private Date dateFrom;
+
+    @Schema(name = "dateTo", description= "Date From", example = "2023-07-08")
+    private Date dateTo;
+
+    @JsonIgnore
+    private String dateFromSearch;
+
+    @JsonIgnore
+    private String dateToSearch;
+
 
     @Schema(name = "address", description= "Order address ", example = "LOREM")
     private String address;
@@ -59,12 +73,36 @@ public class OrderSearchCriteria implements Serializable {
         this.idUser = idUser;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateFrom() {
+        return dateFrom;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public Date getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public String getDateFromSearch() {
+        if (this.getDateFrom()!= null){
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+            return sf.format(this.getDateFrom()) + " 00:00:00.000";
+        }
+        return null;
+    }
+
+    public String getDateToSearch() {
+        if (this.getDateTo()!= null){
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+            return sf.format(this.getDateTo()) + " 23:59:59.999";
+        }
+        return null;
     }
 
     public String getAddress() {

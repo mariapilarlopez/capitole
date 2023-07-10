@@ -20,7 +20,7 @@ public interface OrderDao<Order, Long>{
 
     OrderTo getMoreExpensiveOrder(OrderSearchCriteria criteria);
 
-    void insertOrder(OrderTo order);
+    Boolean insertOrder(OrderTo order);
 
 
 
