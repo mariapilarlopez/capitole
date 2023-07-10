@@ -25,3 +25,5 @@ http://localhost:8090/swagger-ui/index.htm
 UTC as timezone.
 
 The H2 database is created for each run of this exercise (in the real world that wouldn't happen)
+
+The use of "advice" has not been implemented. I have never worked with them, I am reading about them and I hope I can implement them correctly in the future.
