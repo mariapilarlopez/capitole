@@ -10,7 +10,7 @@ Implementation based on "TestSqlDao (3).java"
 - Generate documention of the REST API. 
 
 ## What have I used?
-Springboot, MyBatis, Swagger, Junit, Java11
+Springboot, MyBatis, Swagger, Junit, Java11, H2 database
 
 ## Execution
 Download code and execute
@@ -22,4 +22,6 @@ mvn spring-boot:run
 http://localhost:8090/swagger-ui/index.htm
 
 ## Others
-UTC as timezone
+UTC as timezone.
+
+The H2 database is created for each run of this exercise (in the real world that wouldn't happen)
